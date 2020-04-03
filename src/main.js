@@ -1,13 +1,11 @@
-'use strict';
-
-const TASKS_COUNT = 3;
-
 import {createMenuTemplate} from './components/menu.js';
 import {createFilterTemplate} from './components/filter.js';
 import {createSortingTemplate} from './components/sorting.js';
 import {createTaskEditorTemplate} from './components/task-editor.js';
 import {createTaskTemplate} from './components/task.js';
 import {createLoadButtonTemplate} from './components/load-button.js';
+
+const TASKS_COUNT = 3;
 
 // rendering elements
 
