@@ -1,7 +1,7 @@
 # Личный проект «Менеджер задач» [![Build status][travis-image]][travis-url]
 
 * Студент: [Alex Kellerman](https://up.htmlacademy.ru/ecmascript/11/user/1164029).
-* Наставник: `Неизвестно`.
+* Наставник: [Талифа Аушева 🐱](https://htmlacademy.ru/profile/id1434685).
 
 ---
 
