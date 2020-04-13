@@ -23,8 +23,10 @@ const render = (container, element, place = `beforeend`) => {
 
 render(mainControl, createMenuTemplate());
 
-const filters = generateFilters();
 const tasks = generateTasks(TASKS_COUNT);
+let showingTaskCountArray = tasks.slice(0, SHOWING_TASKS_COUNT_ON_START);
+const filters = generateFilters(showingTaskCountArray);
+
 
 render(main, createFilterTemplate(filters));
 render(main, createBoardContainerTemplate());
@@ -44,9 +46,16 @@ tasks.slice(1, showingTaskCount).forEach((task) => {
 render(board, createLoadButtonTemplate());
 
 const loadMoreButton = document.querySelector(`.load-more`);
-loadMoreButton.addEventListener(`click`, function () {
+loadMoreButton.addEventListener(`click`, () => {
   const previousTaskCount = showingTaskCount;
   showingTaskCount = showingTaskCount + SHOWING_TASK_COUNT_BY_BUTTON;
+
+  // заставляем фильтр реагировать на изменение карточек
+  showingTaskCountArray = tasks.slice(0, showingTaskCount);
+  const oldFilters = document.querySelector(`.filter`);
+  oldFilters.remove();
+  const newfilters = generateFilters(showingTaskCountArray);
+  render(mainControl, createFilterTemplate(newfilters), `afterEnd`);
 
   tasks.slice(previousTaskCount, showingTaskCount).forEach((task) => {
     render(boardTasks, createTaskTemplate(task));
@@ -57,4 +66,5 @@ loadMoreButton.addEventListener(`click`, function () {
   }
 });
 
+export {tasks, SHOWING_TASKS_COUNT_ON_START};
 

@@ -25,7 +25,7 @@ const DescriptionItems = [
   `Стать великим программистом`,
   `Заказать пиццу`,
   `Заплатить ведьмаку чеканой монетой`,
-  `Выучить "Горгород" наизусть`
+  `Выучить "Горгород" наизусть`,
 ];
 
 const DefaultRepeatingDays = {
@@ -36,6 +36,16 @@ const DefaultRepeatingDays = {
   'fr': false,
   'sa': false,
   'su': false,
+};
+
+const WeekDay = {
+  MO: `mo`,
+  TU: `tu`,
+  WE: `we`,
+  TH: `th`,
+  FR: `fr`,
+  SA: `sa`,
+  SU: `su`,
 };
 
 const getRandomArrayItem = (array) => {
@@ -61,7 +71,6 @@ const generateRepeatingDays = () => {
   return Object.assign({}, DefaultRepeatingDays, {'mo': Math.random() > 0.5}, {'we': Math.random() > 0.5}, {'fr': Math.random() > 0.5});
 };
 
-
 const generateTask = () => {
   const dueDate = Math.random() > 0.5 ? null : getRandomDate();
   return {
@@ -71,8 +80,6 @@ const generateTask = () => {
     repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
     isArchieve: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
-
-
   };
 };
 
