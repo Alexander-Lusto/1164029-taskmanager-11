@@ -1,4 +1,4 @@
-import {COLORS} from '../const.js';
+import {COLORS, WeekDay} from '../const.js';
 const DescriptionItems = [
   `Покормить кота`,
   `Поиграть в Rezident Evil`,
@@ -29,23 +29,13 @@ const DescriptionItems = [
 ];
 
 const DefaultRepeatingDays = {
-  'mo': false,
-  'tu': false,
-  'we': false,
-  'th': false,
-  'fr': false,
-  'sa': false,
-  'su': false,
-};
-
-const WeekDay = {
-  MO: `mo`,
-  TU: `tu`,
-  WE: `we`,
-  TH: `th`,
-  FR: `fr`,
-  SA: `sa`,
-  SU: `su`,
+  [WeekDay.MO]: false,
+  [WeekDay.TU]: false,
+  [WeekDay.WE]: false,
+  [WeekDay.TH]: false,
+  [WeekDay.FR]: false,
+  [WeekDay.SA]: false,
+  [WeekDay.SU]: false,
 };
 
 const getRandomArrayItem = (array) => {
@@ -68,7 +58,7 @@ const getRandomDate = () => {
 };
 
 const generateRepeatingDays = () => {
-  return Object.assign({}, DefaultRepeatingDays, {'mo': Math.random() > 0.5}, {'we': Math.random() > 0.5}, {'fr': Math.random() > 0.5});
+  return Object.assign({}, DefaultRepeatingDays, {[WeekDay.MO]: Math.random() > 0.5}, {[WeekDay.WE]: Math.random() > 0.5}, {[WeekDay.FR]: Math.random() > 0.5});
 };
 
 const generateTask = () => {
@@ -77,7 +67,7 @@ const generateTask = () => {
     color: getRandomArrayItem(COLORS),
     text: getRandomArrayItem(DescriptionItems),
     dueDate,
-    repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
+    repeatingDays: dueDate ? Object.assign({}, DefaultRepeatingDays) : generateRepeatingDays(),
     isArchieve: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
   };
@@ -87,4 +77,4 @@ const generateTasks = (count) => {
   return new Array(count).fill(``).map(generateTask);
 };
 
-export {generateTask, generateTasks};
+export {generateTask, generateTasks, DefaultRepeatingDays};

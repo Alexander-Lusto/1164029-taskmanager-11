@@ -24,6 +24,7 @@ const render = (container, element, place = `beforeend`) => {
 render(mainControl, createMenuTemplate());
 
 const tasks = generateTasks(TASKS_COUNT);
+
 let showingTaskCountArray = tasks.slice(0, SHOWING_TASKS_COUNT_ON_START);
 const filters = generateFilters(showingTaskCountArray);
 

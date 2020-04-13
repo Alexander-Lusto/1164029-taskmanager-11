@@ -15,7 +15,7 @@ const calculateCount = (filterName, tasksArray) => {
 
   switch (filterName) {
     case `all`:
-      count = tasksArray.length;
+      count = tasksArray.length - tasksArray.filter((it) => it.isArchieve === true).length;
       break;
     case `overdue`:
       count = tasksArray.filter((it) => it.dueDate instanceof Date && it.dueDate < date).length;

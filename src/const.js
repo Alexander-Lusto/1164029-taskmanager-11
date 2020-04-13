@@ -20,13 +20,22 @@ export const MONTH_NAMES = [
   `November`,
   `December`,
 ];
+export const WeekDay = {
+  MO: `mo`,
+  TU: `tu`,
+  WE: `we`,
+  TH: `th`,
+  FR: `fr`,
+  SA: `sa`,
+  SU: `su`,
+};
 
 export const WEEK_DAYS = [
-  `mo`,
-  `tu`,
-  `we`,
-  `th`,
-  `fr`,
-  `sa`,
-  `su`,
+  WeekDay.MO,
+  WeekDay.TU,
+  WeekDay.WE,
+  WeekDay.TH,
+  WeekDay.FR,
+  WeekDay.SA,
+  WeekDay.SU,
 ];
