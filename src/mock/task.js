@@ -1,4 +1,5 @@
 import {COLORS, WeekDay} from '../const.js';
+
 const DescriptionItems = [
   `Покормить кота`,
   `Поиграть в Rezident Evil`,
@@ -77,4 +78,4 @@ const generateTasks = (count) => {
   return new Array(count).fill(``).map(generateTask);
 };
 
-export {generateTask, generateTasks, DefaultRepeatingDays};
+export {generateTasks, DefaultRepeatingDays};
