@@ -1,11 +1,11 @@
 import {COLORS, WEEK_DAYS, MONTH_NAMES} from '../const.js';
-import {formatTime} from '../utils.js';
+import {createElement, formatTime} from '../utils.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
     const isChecked = (color === currentColor);
     return (
-      ` <input
+      `<input
           type="radio"
           id="color-${color}-${index}"
           class="card__color-input card__color-input--${color} visually-hidden"
@@ -39,7 +39,7 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
   }).join(`\n`);
 };
 
-export const createTaskEditorTemplate = (task) => {
+const createTaskEditorTemplate = (task) => {
   const {text, color, dueDate, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
@@ -120,3 +120,27 @@ export const createTaskEditorTemplate = (task) => {
           </article>`
   );
 };
+
+export default class TaskEditor {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskEditorTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}
