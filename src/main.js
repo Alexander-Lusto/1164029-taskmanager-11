@@ -12,7 +12,7 @@ import {generateFilters} from './mock/filter.js';
 import {render, RenderPosition} from './utils.js';
 
 
-const TASKS_COUNT = 0;
+const TASKS_COUNT = 20;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASK_COUNT_BY_BUTTON = 4;
 
@@ -21,12 +21,11 @@ const renderTask = (taskListElement, task) => {
 
   const replaceTaskToEdit = () => {
     taskListElement.replaceChild(taskEditorComponent.getElement(), taskComponent.getElement());
-    document.addEventListener(`keydown`, onEscKeyDown);
   };
+
 
   const replaceEditToTask = () => {
     taskListElement.replaceChild(taskComponent.getElement(), taskEditorComponent.getElement());
-    document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const onEscKeyDown = (evt) => {
@@ -43,10 +42,15 @@ const renderTask = (taskListElement, task) => {
   const taskEditorComponent = new TaskEditorComponent(task);
   const editForm = taskEditorComponent.getElement().querySelector(`form`);
 
-  editButton.addEventListener(`click`, replaceTaskToEdit);
+  editButton.addEventListener(`click`, () => {
+    replaceTaskToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
   editForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
     replaceEditToTask();
+    document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
@@ -57,12 +61,10 @@ const renderBoard = (boardComponent, tasks) => {
 
   if (isAllTaskArchieve) {
     render(boardComponent.getElement(), new NoTasksComponent().getElement(), RenderPosition.BEFOREEND);
-  } else {
-    render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
-    const loadMoreButtonComponent = new LoadMoreButtonComponent();
-    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+    return;
   }
 
+  render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
   render(boardComponent.getElement(), new TasksComponent().getElement(), RenderPosition.BEFOREEND);
 
   const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
@@ -71,6 +73,8 @@ const renderBoard = (boardComponent, tasks) => {
   tasks.slice(0, showingTasksCount).forEach((task) => {
     renderTask(taskListElement, task);
   });
+  const loadMoreButtonComponent = new LoadMoreButtonComponent();
+  render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
 
   loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
     const previousTaskCount = showingTasksCount;
