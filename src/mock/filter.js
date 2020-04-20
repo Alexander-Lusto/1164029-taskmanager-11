@@ -1,10 +1,10 @@
-const filterNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `archieve`];
+const FILTER_NAMES = [`all`, `overdue`, `today`, `favorites`, `repeating`, `archieve`];
 
 const generateFilters = (tasksArray) => {
-  return filterNames.map((it, i) => {
+  return FILTER_NAMES.map((it, i) => {
     return {
       name: it,
-      count: calculateCount(filterNames[i], tasksArray),
+      count: calculateCount(FILTER_NAMES[i], tasksArray),
     };
   });
 };
