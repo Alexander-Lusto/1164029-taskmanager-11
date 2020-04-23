@@ -1,5 +1,6 @@
 import {COLORS, WEEK_DAYS, MONTH_NAMES} from '../const.js';
-import {createElement, formatTime} from '../utils.js';
+import {formatTime} from '../utils/common.js';
+import AbstractComponent from './abstract-component.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
@@ -121,26 +122,18 @@ const createTaskEditorTemplate = (task) => {
   );
 };
 
-export default class TaskEditor {
+export default class TaskEditor extends AbstractComponent {
   constructor(task) {
+    super();
+
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskEditorTemplate(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setSubmitHandler(callback) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, callback);
   }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }
