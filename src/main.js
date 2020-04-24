@@ -7,7 +7,7 @@ import {render, RenderPosition} from './utils/render.js';
 import BoardController from './controlers/board.js';
 
 
-const TASKS_COUNT = 20;
+const TASKS_COUNT = 40;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 
 const tasks = generateTasks(TASKS_COUNT);
