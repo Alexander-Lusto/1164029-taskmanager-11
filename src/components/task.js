@@ -76,4 +76,12 @@ export default class Task extends AbstractComponent {
   setEditButtonClickHandler(callback) {
     this.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, callback);
   }
+
+  setArchieveButtonClickHandler(callback) {
+    this.getElement().querySelector(`.card__btn--archive`).addEventListener(`click`, callback);
+  }
+
+  setFavoriteButtonClickHandler(callback) {
+    this.getElement().querySelector(`.card__btn--favorites`).addEventListener(`click`, callback);
+  }
 }
