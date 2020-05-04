@@ -5,7 +5,7 @@ import {generateTasks} from './mock/task.js';
 import {generateFilters} from './mock/filter.js';
 import {render, RenderPosition} from './utils/render.js';
 import BoardController from './controlers/board.js';
-
+import TaskModel from '../model/task.js';
 
 const TASKS_COUNT = 40;
 const SHOWING_TASKS_COUNT_ON_START = 8;
@@ -21,7 +21,7 @@ render(siteHeaderElement, new MenuComponent(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardComponent();
-const boardController = new BoardController(boardComponent);
+const boardController = new BoardController(boardComponent, TaskModel);
 
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 boardController.render(tasks);
