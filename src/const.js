@@ -45,3 +45,12 @@ export const SortType = {
   DATE_UP: `date-up`,
   DATE_DOWN: `date-down`,
 };
+
+export const FilterType = {
+  ALL: `all`,
+  OVERDUE: `overdue`,
+  TODAY: `today`,
+  FAVORITES: `favorites`,
+  REPEATING: `repeating`,
+  ARCHIEVE: `archieve`
+};
