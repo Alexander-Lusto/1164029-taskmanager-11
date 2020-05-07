@@ -1,10 +1,12 @@
-export const COLORS = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`,
-];
+export const Color = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`,
+};
+
+export const COLORS = Object.values(Color);
 
 export const MONTH_NAMES = [
   `January`,
@@ -20,6 +22,7 @@ export const MONTH_NAMES = [
   `November`,
   `December`,
 ];
+
 export const WeekDay = {
   MO: `mo`,
   TU: `tu`,
@@ -44,4 +47,13 @@ export const SortType = {
   DEFAULT: `default`,
   DATE_UP: `date-up`,
   DATE_DOWN: `date-down`,
+};
+
+export const FilterType = {
+  ALL: `all`,
+  OVERDUE: `overdue`,
+  TODAY: `today`,
+  FAVORITES: `favorites`,
+  REPEATING: `repeating`,
+  ARCHIEVE: `archieve`
 };

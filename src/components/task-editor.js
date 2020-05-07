@@ -1,12 +1,36 @@
 import {COLORS, WEEK_DAYS} from '../const.js';
-import {formatTime, formatDate} from '../utils/common.js';
+import {formatTime, formatDate, isRepeating, isOverdueDate} from '../utils/common.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import flatpickr from 'flatpickr';
-
 import 'flatpickr/dist/flatpickr.min.css';
+import {encode} from 'he';
 
-const isRepeating = (repeatingDays) => {
-  return Object.values(repeatingDays).some(Boolean);
+const MIN_DESCRIPTION_LENGTH = 1;
+const MAX_DESCRIPTION_LENGTH = 140;
+
+const isAllowableDescriptionLength = (description) => {
+  const length = description.length;
+
+  return length >= MIN_DESCRIPTION_LENGTH && length <= MAX_DESCRIPTION_LENGTH;
+};
+
+const parseFormData = (formData) => { // разобраться как работает
+  const repeatingDays = WEEK_DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  const date = formData.get(`date`);
+
+  return {
+    description: formData.get(`text`),
+    color: formData.get(`color`),
+    dueDate: date ? new Date(date) : null,
+    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, repeatingDays),
+  };
 };
 
 const createColorsMarkup = (colors, currentColor) => {
@@ -48,12 +72,13 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
 };
 
 const createTaskEditorTemplate = (task, options = {}) => {
-  const {text, color, dueDate} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
+  const {color, dueDate} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription: insecureDescription} = options; // : двоеточие в деструктуризации значит записать свойство объекта currentDescription в переменную description
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isBlockSaveButton = (isDateShowing && isRepeatingTask) || (isRepeatingTask && !isRepeating(activeRepeatingDays));
+  const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
+  const isBlockSaveButton = (isDateShowing && isRepeatingTask) || (isRepeatingTask && !isRepeating(activeRepeatingDays)) || !isAllowableDescriptionLength(description);
 
+  const description = encode(insecureDescription);
   const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
   const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 
@@ -79,7 +104,7 @@ const createTaskEditorTemplate = (task, options = {}) => {
                       class="card__text"
                       placeholder="Start typing your text here..."
                       name="text"
-                    >${text}</textarea>
+                    >${description}</textarea>
                   </label>
                 </div>
 
@@ -135,13 +160,37 @@ export default class TaskEditor extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+    this._currentDescription = task.description;
+
 
     this._task = task;
     this._flatpickr = null;
     this._submitHandler = null;
+    this._deleteButtonClickHandler = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
+  }
+
+  setDeleteButtonClickHandler(callback) {
+    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, callback);
+
+    this._deleteButtonClickHandler = callback;
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.card__form`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+
+  _removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+    super.removeElement();
   }
 
   _applyFlatpickr() {
@@ -165,6 +214,7 @@ export default class TaskEditor extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
+      currentDescription: this._currentDescription,
     });
   }
 
@@ -176,6 +226,7 @@ export default class TaskEditor extends AbstractSmartComponent {
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
     this._subscribeOnEvents();
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
   }
 
   rerender() {
@@ -190,12 +241,25 @@ export default class TaskEditor extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+    this._currentDescription = task.description;
 
     this.rerender();
   }
 
   _subscribeOnEvents() {
     const element = this.getElement();
+
+    element.querySelector(`.card__text`).addEventListener(`change`, (evt) => {
+      this._currentDescription = evt.target.value;
+
+      const saveButton = element.querySelector(`.card__save`);
+      const disabled = !isAllowableDescriptionLength(this._currentDescription);
+      if (disabled) {
+        saveButton.diesabled = true;
+      } else {
+        saveButton.diesabled = false;
+      }
+    });
 
     element.querySelector(`.card__date-deadline-toggle`).addEventListener(`click`, () => {
       this._isDateShowing = !this._isDateShowing;
