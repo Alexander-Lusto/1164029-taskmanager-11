@@ -88,11 +88,9 @@ export default class TaskControler {
         if (oldTaskComponent && oldTaskEditComponent) {
           remove(oldTaskComponent);
           remove(oldTaskEditComponent);
-          console.log(`3`);
         }
         document.addEventListener(`keydown`, this._onEscKeyDown);
         render(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
-        console.log(`4`);
         break;
     }
 

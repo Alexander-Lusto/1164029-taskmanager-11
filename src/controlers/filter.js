@@ -1,5 +1,5 @@
 import {FilterType} from '../const.js';
-import {getTasksByFilter} from '../utils/filter.js'
+import {getTasksByFilter} from '../utils/filter.js';
 import FilterComponent from '../components/filter.js';
 import {render, replace, RenderPosition} from '../utils/render.js';
 
@@ -20,8 +20,6 @@ export default class FilterController {
   render() {
     const container = this._container;
     const allTasks = this._taskModel.getTasksAll();
-    console.log(`All tasks:`);
-    console.log(allTasks);
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,

@@ -1,15 +1,11 @@
-import {isOneDay, isOverdueDate, isRepeating} from '../utils/common.js'
-import {FilterType} from '../const.js'
+import {isOneDay, isOverdueDate, isRepeating} from '../utils/common.js';
+import {FilterType} from '../const.js';
 
 export const getArchieveTasks = (tasks) => {
-  //console.log(`get Archieve Tasks:`);
-  //console.log(tasks);
   return tasks.filter((task) => task.isArchieve);
 };
 
 export const getNotArchieveTasks = (tasks) => {
-  //console.log(`get Not Archieve Tasks:`);
-  //console.log(tasks);
   return tasks.filter((task) => !task.isArchieve);
 };
 
