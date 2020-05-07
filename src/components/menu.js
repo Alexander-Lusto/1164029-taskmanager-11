@@ -1,5 +1,11 @@
 import AbstractComponent from './abstract-component.js';
 
+export const MenuItem = {
+  NEW_TASK: `control__new-task`,
+  TASKS: `control__task`,
+  STATISTIC: `control__statistic`,
+};
+
 const createMenuTemplate = () => {
   return (
     `<section class="control__btn-wrap">
@@ -37,5 +43,24 @@ const createMenuTemplate = () => {
 export default class Menu extends AbstractComponent {
   getTemplate() {
     return createMenuTemplate();
+  }
+
+  setActiveItem(menuItem) {
+    const item = this.getElement().querySelector(`#${menuItem}`);
+    if (item) {
+      item.checked = true;
+    }
+  }
+
+  setOnChange(callback) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      if (evt.target.tagName !== `INPUT`) {
+        return;
+      }
+      const menuItem = evt.target.id;
+
+      callback(menuItem);
+    });
+
   }
 }

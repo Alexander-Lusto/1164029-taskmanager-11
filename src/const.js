@@ -1,10 +1,12 @@
-export const COLORS = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`,
-];
+export const Color = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`,
+};
+
+export const COLORS = Object.values(Color);
 
 export const MONTH_NAMES = [
   `January`,
@@ -20,6 +22,7 @@ export const MONTH_NAMES = [
   `November`,
   `December`,
 ];
+
 export const WeekDay = {
   MO: `mo`,
   TU: `tu`,

@@ -67,7 +67,7 @@ const generateTask = () => {
   return {
     id: getRandomIntegerNumber(100000000, 110000000),
     color: getRandomArrayItem(COLORS),
-    text: getRandomArrayItem(DescriptionItems),
+    description: getRandomArrayItem(DescriptionItems),
     dueDate,
     repeatingDays: dueDate ? Object.assign({}, DefaultRepeatingDays) : generateRepeatingDays(),
     isArchieve: Math.random() > 0.5,

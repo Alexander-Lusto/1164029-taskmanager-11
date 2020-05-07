@@ -1,5 +1,4 @@
 import AbstractComponent from './abstract-component.js';
-//import {getFilterNameById} from '../utils/filter.js';
 
 const FILTER_ID_PREFIX = `filter__`;
 

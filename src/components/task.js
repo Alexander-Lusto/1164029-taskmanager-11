@@ -1,12 +1,14 @@
-import {formatTime, formatDate} from '../utils/common.js';
+import {formatTime, formatDate, isOverdueDate} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
+import {encode} from 'he';
 
 const createTaskTemplate = (task) => {
-  const {text, color, dueDate, repeatingDays, isArchieve, isFavorite} = task;
+  const {description: insecureDescription, color, dueDate, repeatingDays, isArchieve, isFavorite} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
   const isDateShowing = !!dueDate;
 
+  const description = encode(insecureDescription);
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
@@ -41,7 +43,7 @@ const createTaskTemplate = (task) => {
                 </div>
 
                 <div class="card__textarea-wrap">
-                  <p class="card__text">${text}</p>
+                  <p class="card__text">${description}</p>
                 </div>
 
                 <div class="card__settings">

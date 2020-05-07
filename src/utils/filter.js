@@ -1,16 +1,16 @@
 import {isOneDay, isOverdueDate, isRepeating} from '../utils/common.js'
 import {FilterType} from '../const.js'
 
-export const getTasksByFilter = (tasks) => {
-  return tasks;
-};
-
 export const getArchieveTasks = (tasks) => {
-  return tasks.filters((task) => task.isArchieve);
+  //console.log(`get Archieve Tasks:`);
+  //console.log(tasks);
+  return tasks.filter((task) => task.isArchieve);
 };
 
 export const getNotArchieveTasks = (tasks) => {
-  return tasks.filters((task) => !task.isArchieve);
+  //console.log(`get Not Archieve Tasks:`);
+  //console.log(tasks);
+  return tasks.filter((task) => !task.isArchieve);
 };
 
 export const getFavoritesTasks = (tasks) => {
@@ -21,7 +21,7 @@ export const getOverdueTasks = (tasks, date) => {
   return tasks.filter((task) => {
     const dueDate = task.dueDate;
 
-    if (dueDate === false) {
+    if (!dueDate) {
       return false;
     }
 
@@ -37,7 +37,7 @@ export const getTasksInOneDay = (tasks, date) => {
   return tasks.filter((task) => isOneDay(task.dueDate, date));
 };
 
-export const getFilteredTasks = (tasks, filterType) => {
+export const getTasksByFilter = (tasks, filterType) => {
   const date = new Date();
 
   switch (filterType) {
@@ -63,5 +63,4 @@ export const getFilteredTasks = (tasks, filterType) => {
   }
 
   return tasks;
-
 };
