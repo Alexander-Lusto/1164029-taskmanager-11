@@ -75,10 +75,11 @@ const createTaskEditorTemplate = (task, options = {}) => {
   const {color, dueDate} = task;
   const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription: insecureDescription} = options; // : двоеточие в деструктуризации значит записать свойство объекта currentDescription в переменную description
 
+  const description = encode(insecureDescription);
   const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) || (isRepeatingTask && !isRepeating(activeRepeatingDays)) || !isAllowableDescriptionLength(description);
 
-  const description = encode(insecureDescription);
+
   const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
   const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 

@@ -1,5 +1,5 @@
 import {getTasksByFilter} from '../utils/filter.js';
-import {FilterType} from '../const.js';
+import {FilterType, } from '../const.js';
 
 export default class Task {
   constructor() {
@@ -12,6 +12,10 @@ export default class Task {
 
   getTasks() {
     return getTasksByFilter(this._tasks, this._activeFilterType);
+  }
+
+  getCompletedTasks() {
+    return getTasksByFilter(this._tasks, FilterType.ARCHIEVE);
   }
 
   getTasksAll() {

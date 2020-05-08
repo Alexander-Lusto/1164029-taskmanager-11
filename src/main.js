@@ -6,7 +6,8 @@ import BoardController from './controlers/board.js';
 import TaskModel from './models/task.js';
 import FilterController from './controlers/filter.js';
 
-const TASKS_COUNT = 22;
+
+const TASKS_COUNT = 100;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
@@ -32,6 +33,14 @@ menuComponent.setOnChange((menuItem) => {
       menuComponent.setActiveItem(MenuItem.TASKS);
       boardController.createTask();
       break;
+    case MenuItem.STATISTIC:
+      menuComponent.setActiveItem(MenuItem.STATISTIC);
+      boardController.createStatistic(boardComponent);
+      break;
+    case MenuItem.TASKS:
+      menuComponent.setActiveItem(MenuItem.TASKS);
+      boardController.hideStatistic();
+      boardController.render(tasks);
+      break;
   }
 });
-
