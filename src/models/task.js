@@ -1,5 +1,5 @@
 import {getTasksByFilter} from '../utils/filter.js';
-import {FilterType, } from '../const.js';
+import {FilterType} from '../const.js';
 
 export default class Task {
   constructor() {
