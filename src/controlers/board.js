@@ -6,7 +6,7 @@ import NoTasksComponent from '../components/no-tasks.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {SortType} from '../const.js';
 import {Mode as TaskControllerMode, EmptyTask} from './task.js';
-import StatisticComponent from '../components/statistic.js';
+
 
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASK_COUNT_BY_BUTTON = 4;
@@ -50,7 +50,6 @@ export default class BoardController {
     this._showedTaskControllers = [];
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
-    this._statisticComponent = new StatisticComponent();
     this._noTaskComponent = new NoTasksComponent();
     this._sortComponent = new SortComponent();
     this._tasksComponent = new TasksComponent();
@@ -192,16 +191,11 @@ export default class BoardController {
     this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
   }
 
-  createStatistic(containerComponent) {
-    this._removeTasks();
-    remove(this._sortComponent);
-    remove(this._loadMoreButtonComponent);
-    render(containerComponent.getElement(), this._statisticComponent, RenderPosition.AFTERBEGIN);
-    this._statisticComponent.createLineChart();
-    this._statisticComponent.createCircleDiagram(this._tasksModel.getCompletedTasks());
+  hide() {
+    this._container.hide();
   }
 
-  hideStatistic() {
-    remove(this._statisticComponent);
+  show() {
+    this._container.show();
   }
 }
