@@ -14,6 +14,10 @@ export default class Task {
     return getTasksByFilter(this._tasks, this._activeFilterType);
   }
 
+  getCompletedTasks() {
+    return getTasksByFilter(this._tasks, FilterType.ARCHIEVE);
+  }
+
   getTasksAll() {
     return this._tasks;
   }

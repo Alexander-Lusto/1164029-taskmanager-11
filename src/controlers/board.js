@@ -7,6 +7,7 @@ import {render, RenderPosition, remove} from '../utils/render.js';
 import {SortType} from '../const.js';
 import {Mode as TaskControllerMode, EmptyTask} from './task.js';
 
+
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASK_COUNT_BY_BUTTON = 4;
 
@@ -188,5 +189,13 @@ export default class BoardController {
 
   _onFilterChange() {
     this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
+  }
+
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
   }
 }
