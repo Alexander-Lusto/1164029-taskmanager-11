@@ -14,25 +14,6 @@ const isAllowableDescriptionLength = (description) => {
   return length >= MIN_DESCRIPTION_LENGTH && length <= MAX_DESCRIPTION_LENGTH;
 };
 
-const parseFormData = (formData) => { // разобраться как работает
-  const repeatingDays = WEEK_DAYS.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-
-  const date = formData.get(`date`);
-
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, repeatingDays),
-  };
-};
-
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
     const isChecked = (color === currentColor);
@@ -181,9 +162,7 @@ export default class TaskEditor extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
-
-    return parseFormData(formData);
+    return new FormData(form);
   }
 
   _removeElement() {

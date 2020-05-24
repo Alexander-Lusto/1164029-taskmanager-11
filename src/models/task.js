@@ -1,78 +1,37 @@
-import {getTasksByFilter} from '../utils/filter.js';
-import {FilterType} from '../const.js';
-
 export default class Task {
-  constructor() {
-    this._tasks = [];
-
-    this._activeFilterType = FilterType.ALL;
-    this._dataChangeHandlers = [];
-    this._filterChangeHandlers = [];
+  constructor(data) {
+    this.data = data;
+    this.id = data[`id`];
+    this.description = data[`description`] || ``;
+    this.dueDate = data[`due_date`] ? new Date(data[`due_date`]) : null;
+    this.repeatingDays = data[`repeating_days`];
+    this.color = data[`color`];
+    this.isFavorite = Boolean(data[`is_favorite`]);
+    this.isArchived = Boolean(data[`is_archived`]);
   }
 
-  getTasks() {
-    return getTasksByFilter(this._tasks, this._activeFilterType);
+  toRAW() {
+    return {
+      'id': this.id,
+      'description': this.description,
+      'due_date': this.dueDate ? this.dueDate.toISOString() : null, // превращает объект Date в строку в формате ISO, понятную для сервера
+      'repeating_days': this.repeatingDays,
+      'color': this.color,
+      'is_favorite': this.isFavorite,
+      'is_archived': this.isArchived,
+    };
   }
 
-  getCompletedTasks() {
-    return getTasksByFilter(this._tasks, FilterType.ARCHIEVE);
+  static parseTask(data) {
+    return new Task(data);
   }
 
-  getTasksAll() {
-    return this._tasks;
+  static parseTasks(data) {
+
+    return data.map(Task.parseTask);
   }
 
-  setTasks(tasks) {
-    this._tasks = Array.from(tasks);
+  static clone(data) {
+    return new Task(data.toRAW());
   }
-
-  setFilter(filterType) {
-    this._activeFilterType = filterType;
-    this._callHandlers(this._filterChangeHandlers);
-  }
-
-  updateTask(id, task) {
-    const index = this._tasks.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
-
-    this._callHandlers(this._dataChangeHandlers);
-    return true;
-  }
-
-  removeTask(id) {
-    const index = this._tasks.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
-
-    this._callHandlers(this._dataChangeHandlers);
-
-    return true;
-  }
-
-  addTask(task) {
-    this._tasks = [].concat(task, this._tasks);
-    this._callHandlers(this._dataChangeHandlers);
-  }
-
-  _callHandlers(handlers) {
-    handlers.forEach((handler) => handler());
-  }
-
-  setDataChangeHandler(handler) {
-    this._dataChangeHandlers.push(handler);
-  }
-
-  setFilterChangeHandler(handler) {
-    this._filterChangeHandlers.push(handler);
-  }
-
 }
