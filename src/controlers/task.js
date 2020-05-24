@@ -1,12 +1,33 @@
 import TaskComponent from '../components/task.js';
+import TaskModel from '../models/task.js';
 import TaskEditorComponent from '../components/task-editor.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-import {Color} from '../const.js';
+import {Color, WEEK_DAYS} from '../const.js';
 
 export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
   ADDING: `adding`,
+};
+
+const parseFormData = (formData) => { // разобраться как работает
+  const date = formData.get(`date`);
+  const repeatingDays = WEEK_DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  return new TaskModel({
+    'description': formData.get(`text`),
+    'due_date': date ? new Date(date) : null,
+    'repeating_days': formData.getAll(`repeat`).reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, repeatingDays),
+    'color': formData.get(`color`),
+    'is_favorite': false,
+    'is_archived': false,
+  });
 };
 
 export const EmptyTask = {
@@ -54,7 +75,10 @@ export default class TaskControler {
 
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._taskEditComponent.getData();
+
+      const formData = this._taskEditComponent.getData();
+      const data = parseFormData(formData);
+
       this._onDataChange(this, task, data);
     });
 
@@ -63,15 +87,16 @@ export default class TaskControler {
     });
 
     this._taskComponent.setArchieveButtonClickHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {
-        isArchieve: !task.isArchieve
-      }));
+      const newTask = TaskModel.clone(task);
+      newTask.isArchieve = !newTask.isArchieve;
+
+      this._onDataChange(this, task, newTask);
     });
 
     this._taskComponent.setFavoriteButtonClickHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {
-        isFavorite: !task.isFavorite
-      }));
+      const newTask = TaskModel.clone(task);
+      newTask.isFavorite = !newTask.isFavorite;
+      this._onDataChange(this, task, newTask);
     });
 
     switch (mode) {
@@ -93,8 +118,6 @@ export default class TaskControler {
         render(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
         break;
     }
-
-
   }
 
   setDefaultView() {
