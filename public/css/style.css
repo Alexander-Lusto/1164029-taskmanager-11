@@ -835,3 +835,7 @@ body {
   animation: shake 0.6s;
 }
 
+.error {
+  border: 1px solid red;
+}
+

@@ -183,9 +183,9 @@ export default class TaskControler {
         saveButtonText: `Save`,
         deleteButtonText: `Delete`,
       });
+      this._taskEditComponent.getElement().querySelector(`.card--edit .card__inner`).style = `border: 1px solid red;`;
     }, SHAKE_ANIMATION_TIMEOUT);
   }
-
 }
 
 
