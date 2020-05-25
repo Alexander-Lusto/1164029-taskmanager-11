@@ -10,6 +10,8 @@ export const Mode = {
   ADDING: `adding`,
 };
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const parseFormData = (formData) => { // разобраться как работает
   const date = formData.get(`date`);
   const repeatingDays = WEEK_DAYS.reduce((acc, day) => {
@@ -79,10 +81,18 @@ export default class TaskControler {
       const formData = this._taskEditComponent.getData();
       const data = parseFormData(formData);
 
+      this._taskEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
+
       this._onDataChange(this, task, data);
     });
 
     this._taskEditComponent.setDeleteButtonClickHandler(() => {
+      this._taskEditComponent.setData({
+        deleteButtonText: `Deleting...`
+      });
+
       this._onDataChange(this, task, null);
     });
 
@@ -159,6 +169,21 @@ export default class TaskControler {
     remove(this._taskComponent);
     remove(this._taskEditComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  shake() {
+    this._taskEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._taskComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._taskEditComponent.getElement().style.animation = ``;
+      this._taskComponent.getElement().style.animation = ``;
+
+      this._taskEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
 }
