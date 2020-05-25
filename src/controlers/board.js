@@ -157,24 +157,35 @@ export default class BoardController {
         taskController.destroy();
         this._updateTasks(this._showingTasksCount);
       } else { // в обратном случае - создаем новую задачу
-        this._tasksModel.addTask(newData); // добавляем карточку в модель данных
-        taskController.render(newData, TaskControllerMode.DEFAULT);
+        this._api.createTask(newData) // добавляем карточку в модель данных
+          .then((taskModel) => {
+            this._tasksModel.addTask(taskModel);
+            taskController.render(taskModel, TaskControllerMode.DEFAULT);
 
-        if (this._showingTasksCount % SHOWING_TASK_COUNT_BY_BUTTON === 0) { // проверяем не превысили ли мы лимит по количеству отображаемых карточек
-          const destroedTask = this._showedTaskControllers.pop(); // если карточек больше чем может быть на экране (8), то удаляем лишнюю
-          destroedTask.destroy();
+            if (this._showingTasksCount % SHOWING_TASK_COUNT_BY_BUTTON === 0) { // проверяем не превысили ли мы лимит по количеству отображаемых карточек
+              const destroedTask = this._showedTaskControllers.pop(); // если карточек больше чем может быть на экране (8), то удаляем лишнюю
+              destroedTask.destroy();
 
-        }
+            }
 
-        this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
-        this._showingTaskCount = this._showedTaskControllers.length; // обновляем количество карточек
+            this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
+            this._showingTaskCount = this._showedTaskControllers.length; // обновляем количество карточек
 
-        this._renderLoadMoreButton();
+            this._renderLoadMoreButton();
+          })
+          .catch(() => {
+            taskController.shake();
+          });
       }
-
     } else if (newData === null) { // если новых данных нет, тогда: (удаление)
-      this._tasksModel.removeTask(oldData.id); // удаляем старые данные
-      this._updateTasks(this._showingTasksCount); // перерисоваем отображение view
+      this._api.deleteTask(oldData.id)
+        .then(() => {
+          this._tasksModel.removeTask(oldData.id); // удаляем старые данные
+          this._updateTasks(this._showingTaskCount); // перерисоваем отображение view
+        })
+        .catch(() => {
+          taskController.shake();
+        });
     } else { // если есть и старые и новые данные: (обновление)
       this._api.updateTask(oldData.id, newData)
         .then((taskModel) => {
@@ -184,8 +195,10 @@ export default class BoardController {
             taskController.render(taskModel, TaskControllerMode.DEFAULT);
             this._updateTasks(this._showingTasksCount);
           }
+        })
+        .catch(() => {
+          taskController.shake();
         });
-
     }
   }
 
