@@ -32,7 +32,6 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 const menuComponent = new MenuComponent();
 const statisticComponent = new StatisticComponent({tasks: tasksModel, dateFrom, dateTo});
 
-
 const boardComponent = new BoardComponent();
 const boardController = new BoardController(boardComponent, tasksModel, apiWithProvider);
 const filterController = new FilterController(siteMainElement, tasksModel);
@@ -68,7 +67,17 @@ apiWithProvider.getTasks()
     .then((tasks) => {
       tasksModel.setTasks(tasks);
       boardController.render();
+      filterController.render();
     });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      // Действие, в случае успешной регистрации ServiceWorker
+    }).catch(() => {
+      // Действие, в случае ошибки при регистрации ServiceWorker
+    });
+});
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);

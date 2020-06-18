@@ -3,7 +3,7 @@ import AbstractComponent from './abstract-component.js';
 import {encode} from 'he';
 
 const createTaskTemplate = (task) => {
-  const {description: insecureDescription, color, dueDate, repeatingDays, isArchieve, isFavorite} = task;
+  const {description: insecureDescription, color, dueDate, repeatingDays, isArchive, isFavorite} = task;
 
   const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
   const isDateShowing = !!dueDate;
@@ -14,7 +14,7 @@ const createTaskTemplate = (task) => {
 
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
-  const archieveButtonInactiveClass = isArchieve ? `` : `card__btn--disabled`;
+  const archiveButtonInactiveClass = isArchive ? `` : `card__btn--disabled`;
   const favoriteButtonInactiveClass = isFavorite ? `` : `card__btn--disabled`;
 
   return (
@@ -25,7 +25,7 @@ const createTaskTemplate = (task) => {
                   <button type="button" class="card__btn card__btn--edit">
                     edit
                   </button>
-                  <button type="button" class="card__btn card__btn--archive ${archieveButtonInactiveClass}">
+                  <button type="button" class="card__btn card__btn--archive ${archiveButtonInactiveClass}">
                     archive
                   </button>
                   <button
@@ -78,7 +78,7 @@ export default class Task extends AbstractComponent {
     this.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, callback);
   }
 
-  setArchieveButtonClickHandler(callback) {
+  setArchiveButtonClickHandler(callback) {
     this.getElement().querySelector(`.card__btn--archive`).addEventListener(`click`, callback);
   }
 

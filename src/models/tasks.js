@@ -11,11 +11,12 @@ export default class Tasks {
   }
 
   getTasks() {
+    console.log(this._tasks);
     return getTasksByFilter(this._tasks, this._activeFilterType);
   }
 
   getCompletedTasks() {
-    return getTasksByFilter(this._tasks, FilterType.ARCHIEVE);
+    return getTasksByFilter(this._tasks, FilterType.ARCHIVE);
   }
 
   getTasksAll() {

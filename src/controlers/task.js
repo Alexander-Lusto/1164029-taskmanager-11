@@ -45,7 +45,7 @@ export const EmptyTask = {
     'sa': false,
     'su': false,
   },
-  isArchieve: false,
+  isArchive: false,
   isFavorite: false,
 };
 
@@ -96,9 +96,9 @@ export default class TaskControler {
       this._onDataChange(this, task, null);
     });
 
-    this._taskComponent.setArchieveButtonClickHandler(() => {
+    this._taskComponent.setArchiveButtonClickHandler(() => {
       const newTask = TaskModel.clone(task);
-      newTask.isArchieve = !newTask.isArchieve;
+      newTask.isArchive = !newTask.isArchive;
 
       this._onDataChange(this, task, newTask);
     });

@@ -1,12 +1,12 @@
 import {isOneDay, isOverdueDate, isRepeating} from '../utils/common.js';
 import {FilterType} from '../const.js';
 
-export const getArchieveTasks = (tasks) => {
-  return tasks.filter((task) => task.isArchieve);
+export const getArchiveTasks = (tasks) => {
+  return tasks.filter((task) => task.isArchive);
 };
 
-export const getNotArchieveTasks = (tasks) => {
-  return tasks.filter((task) => !task.isArchieve);
+export const getNotArchiveTasks = (tasks) => {
+  return tasks.filter((task) => !task.isArchive);
 };
 
 export const getFavoritesTasks = (tasks) => {
@@ -39,22 +39,22 @@ export const getTasksByFilter = (tasks, filterType) => {
   switch (filterType) {
 
     case FilterType.ALL:
-      return getNotArchieveTasks(tasks);
+      return getNotArchiveTasks(tasks);
 
-    case FilterType.ARCHIEVE:
-      return getArchieveTasks(tasks);
+    case FilterType.Archive:
+      return getArchiveTasks(tasks);
 
     case FilterType.FAVORITES:
-      return getFavoritesTasks(getNotArchieveTasks(tasks));
+      return getFavoritesTasks(getNotArchiveTasks(tasks));
 
     case FilterType.OVERDUE:
-      return getOverdueTasks(getNotArchieveTasks(tasks), date);
+      return getOverdueTasks(getNotArchiveTasks(tasks), date);
 
     case FilterType.REPEATING:
-      return getRepeatingTasks(getNotArchieveTasks(tasks));
+      return getRepeatingTasks(getNotArchiveTasks(tasks));
 
     case FilterType.TODAY:
-      return getTasksInOneDay(getNotArchieveTasks(tasks), date);
+      return getTasksInOneDay(getNotArchiveTasks(tasks), date);
 
   }
 

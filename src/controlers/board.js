@@ -81,9 +81,9 @@ export default class BoardController {
     const tasks = this._tasksModel.getTasks();
 
     const container = this._container.getElement();
-    const isAllTaskArchieve = tasks.every((task) => task.isAllTaskArchieve);
+    const isAllTaskArchive = tasks.every((task) => task.isAllTaskArchive);
 
-    if (isAllTaskArchieve) {
+    if (isAllTaskArchive) {
       render(container, this._noTaskComponent, RenderPosition.BEFOREEND);
       return;
     }

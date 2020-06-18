@@ -55,5 +55,5 @@ export const FilterType = {
   TODAY: `today`,
   FAVORITES: `favorites`,
   REPEATING: `repeating`,
-  ARCHIEVE: `archieve`
+  ARCHIVE: `archive`
 };
